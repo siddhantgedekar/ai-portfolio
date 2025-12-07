@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #333;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/*Target the header*/
+header {
+    background-color: #222;
+    padding: 20px;
+}
+
+header h1 {
+    color: skyblue;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+nav ul {
+    display: flex;
+    gap: 20px;
+    font-weight: bold;
+    list-style: none;
+}
+
+nav ul li a {
+    color: lightgreen;
+    text-decoration: none;
+}
+
+/* Targeting Hero Section */
+#hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+h2 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+#warning {
+    width: 60%;
+    font-size: 0.65rem;
+    color: #ccc;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+button {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: orange;
+}
+
+#user-input {
+    border: none;
+    padding: 10px;
+    color: white;
+    font-size: 1rem;
+    margin: 10px 0px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #666;
+}
+
+#output-text {
+    width: 60%;
+    padding: 5px;
+    margin: 20px auto;
+    overflow-y: scroll;
+    text-align: justify;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    border-radius: 5px;
+    border: 1px solid #555;
+}
+
+/* The box that holds all messages */
+#chat-history {
+    height: 400px;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #444;
+    background-color: #222;
+    overflow-y: auto; /* Allows scrolling if messages get too long */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+    gap: 10px;
+}
+
+/* Common style for ALL messages */
+.message {
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: justify;
+}
+
+/* Specific style for USER messages (Right side, Blue) */
+.user-message {
+    align-self: flex-end; /* Push to right */
+    background-color: #007bff;
+    color: white;
+    border-bottom-right-radius: 2px; /* Little stylistic visual cue */
+}
+
+/* Specific style for AI messages (Left side, Grey) */
+.bot-message {
+    align-self: flex-start; /* Push to left */
+    background-color: #444;
+    color: #eee;
+    border-bottom-left-radius: 2px;
+}
+
+/* --- MARKDOWN STYLES --- */
+
+/* Code Blocks (The dark boxes for code) */
+.message pre {
+    background-color: #2d2d2d;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto; /* Allows scrolling sideways for long code */
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.message code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+}
+
+/* Lists (Bullet points) */
+.message ul, .message ol {
+    margin-left: 20px; /* Indent the dots */
+}
+
+/* Paragraphs */
+.message p {
+    margin-bottom: 5px; /* Add space between paragraphs */
+}
