@@ -102,7 +102,8 @@ async function handleInput() {
 
     try {
         // 2. Send to Python
-        const response = await fetch('http://127.0.0.1:5000/chat', {
+        // http://127.0.0.1:5000/chat
+        const response = await fetch('http://sids-ai-lab.onrenderer.com/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: userText })
@@ -112,6 +113,9 @@ async function handleInput() {
 
         // 3. Add AI message to the screen
         addMessageToChat(data.reply, 'bot-message');
+
+        // NEW: make ai speak the answer
+        speakText(data.reply);
 
     } catch (error) {
         addMessageToChat("Error: Could not connect to brain.", 'bot-message');
@@ -149,3 +153,77 @@ inputField.addEventListener('keypress', function (e) {
         handleInput();
     }
 });
+
+// mic button functionality
+const micButton = document.getElementById('mic-btn');
+
+// check if browser support speech recognition
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = false; // stop listening after one sentence
+    recognition.lang = 'en-US'; // language
+    recognition.interimResults = false; // we want final results only
+
+    // when mic button is clicked
+    micButton.addEventListener('click', () => {
+        if (micButton.innerText === '🎤') {
+            recognition.start();
+            // micButton.innerText = '🛑'; // change icon to stop
+        } else {
+            recognition.stop();
+            // micButton.innerText = '🎤'; // change icon to mic
+        }
+    });
+
+    // when speaking starts
+    recognition.onstart = () => {
+        micButton.innerText = "Listening...";
+        micButton.style.backgroundColor = "red";
+    };
+
+    // when speaking ends
+    recognition.onend = () => {
+        micButton.innerText = "🎤";
+        micButton.style.backgroundColor = "#444";
+    };
+
+    // when text is captured
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        inputField.value = transcript; // put text in box
+        handleInput(); // send it
+    };
+} else {
+    // browser does not support
+    micButton.style.display = 'none'; // hide the mic button
+    console.log("Web Speech API not supported in this browser.");
+}
+
+let isMuted = false;
+const muteButton = document.getElementById('mute-btn');
+
+muteButton.addEventListener('click', () => {
+    isMuted = !isMuted; // Toggle true/false
+    muteButton.innerText = isMuted ? "🔇" : "🔊"; // Change Icon
+});
+
+function speakText(text) {
+    if (isMuted) return; // If muted, stop here.
+    
+    // 1. clean text (remove markdowns)
+    const cleanText = text.replace(/[#_*`]/g, '');
+
+    // 2. create the utterance (speech object)
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    // 3. pick a voice (standard US English)
+    utterance.lang = 'en-US';
+    utterance.rate = 0.8; // speed
+    utterance.pitch = 1;
+
+    // 4. speak it
+    window.speechSynthesis.speak(utterance);
+}
